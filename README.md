@@ -1,6 +1,14 @@
 # kill-mysql-query
 
-`kill-mysql-query` is a cli that interactively shows long running queries in MySQL database and provide option kill them one by one.
+```
+  _____     ____
+/      \  |  o |
+|        |/ ___\|
+|_________/
+|_|_| |_|_|
+```
+
+`kill-mysql-query` interactively shows long running queries in MySQL database and provide option kill them one by one.
 
 👉 Great for firefighting 🔥🚨🚒
 

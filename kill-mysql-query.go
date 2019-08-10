@@ -72,6 +72,9 @@ func main() {
 		}
 
 		showKillPrompt(longQueries, dbConn, config)
+		fmt.Println()
+		fmt.Println()
+		fmt.Println()
 		fmt.Println("-----------------------------------")
 		fmt.Println("💫	Rechecking...")
 		fmt.Println("-----------------------------------")
@@ -154,9 +157,9 @@ func showKillPrompt(longQueries []mysql.MysqlProcess, dbConn *sqlx.DB, config co
 	if len(longQueries) > 1 {
 		templates := &promptui.SelectTemplates{
 			Label: "{{ . }}?",
-			Active: "👉	DB `{{ .DB | cyan }}`,	Running Time: {{ .Time | cyan }}s,	Query: {{ .Info.String | cyan }}",
-			Inactive: "	DB `{{ .DB }}`,	Running Time: {{ .Time }}s,	Query: {{ .Info.String }}",
-			Selected: "💥	DB `{{ .DB | cyan }}`,	Running Time: {{ .Time | cyan }}s,	Query: {{ .Info.String | cyan }}",
+			Active: "👉	DB `{{ .DB | cyan }}`,	Running Time: {{ .Time | cyan }}s,	Query: {{ .TruncatedQuery | cyan }}",
+			Inactive: "	DB `{{ .DB }}`,	Running Time: {{ .Time }}s,	Query: {{ .TruncatedQuery }}",
+			Selected: "💥	DB `{{ .DB | cyan }}`,	Running Time: {{ .Time | cyan }}s,	Query: {{ .TruncatedQuery | cyan }}",
 			Details: `
 --------- QUERY ----------
 {{ "ID:" | faint }}	{{ .ID }}
@@ -164,7 +167,7 @@ func showKillPrompt(longQueries []mysql.MysqlProcess, dbConn *sqlx.DB, config co
 {{ "State:" | faint }}	{{ .State.String }}
 {{ "Command:" | faint }}	{{ .Command }}
 {{ "Running Time:" | faint }}	{{ .Time }} second(s)
-{{ "Query:" | faint }}	{{ .Info.String }}`,
+{{ "Query:" | faint }}	{{ .TruncatedQuery }}`,
 		}
 
 		prompt := promptui.Select{

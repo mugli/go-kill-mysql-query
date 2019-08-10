@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"database/sql"
 	"fmt"
+	"regexp"
 	"text/template"
 
 	"github.com/mugli/go-kill-mysql-query/configuration"
@@ -46,13 +47,14 @@ type queryParams struct {
 }
 
 type MysqlProcess struct {
-	ID          int            `db:"ID"`
-	KillCommand string         `db:"KILL_COMMAND"`
-	DB          string         `db:"DB"`
-	State       sql.NullString `db:"STATE"`
-	Command     string         `db:"COMMAND"`
-	Time        int            `db:"TIME"`
-	Info        sql.NullString `db:"INFO"`
+	ID             int            `db:"ID"`
+	KillCommand    string         `db:"KILL_COMMAND"`
+	DB             string         `db:"DB"`
+	State          sql.NullString `db:"STATE"`
+	Command        string         `db:"COMMAND"`
+	Time           int            `db:"TIME"`
+	Info           sql.NullString `db:"INFO"`
+	TruncatedQuery string
 }
 
 func generateQuery(config configuration.Config) (string, error) {
@@ -87,6 +89,20 @@ func generateQuery(config configuration.Config) (string, error) {
 	return queryBytes.String(), nil
 }
 
+func truncateString(str string, num int) string {
+	// Remove newlines
+	re := regexp.MustCompile(`\r?\n`)
+	retval := re.ReplaceAllString(str, " ")
+
+	if len(retval) > num {
+		if num > 3 {
+			num -= 3
+		}
+		retval = retval[0:num] + "..."
+	}
+	return retval
+}
+
 func GetLongRunningQueries(dbConn *sqlx.DB, config configuration.Config) ([]MysqlProcess, error) {
 	fmt.Println("🕴	Looking for slow queries...")
 
@@ -100,6 +116,9 @@ func GetLongRunningQueries(dbConn *sqlx.DB, config configuration.Config) ([]Mysq
 		for rows.Next() {
 			longQ := MysqlProcess{}
 			rows.StructScan(&longQ)
+
+			longQ.TruncatedQuery = truncateString(longQ.Info.String, 50)
+
 			longQueries = append(longQueries, longQ)
 		}
 		rows.Close()
