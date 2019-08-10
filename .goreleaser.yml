@@ -3,14 +3,20 @@
 project_name: kill-mysql-query
 before:
   hooks:
-    # you may remove this if you don't use vgo
     - go mod download
 builds:
   - env:
       - CGO_ENABLED=0
+    goos:
+      - darwin
+      - windows
+      - linux
+    ignore:
+      - goos: darwin
+        goarch: 386
 archives:
   - replacements:
-      darwin: Darwin
+      darwin: macOS
       linux: Linux
       windows: Windows
       386: i386
