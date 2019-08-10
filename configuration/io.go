@@ -43,14 +43,14 @@ func validate(config Config) error {
 	if err != nil {
 		errs := err.(validator.ValidationErrors)
 
-		return errors.New(fmt.Sprintf("%s is required", errs[0].Field()))
+		return errors.New(fmt.Sprintf("%s is required in configuration", errs[0].Field()))
 	}
 
 	return nil
 }
 
 func Read(file string) (Config, error) {
-	fmt.Println("⚙️	Reading config")
+	fmt.Println("⚙️	Reading configuration")
 	var filePath string
 	config := setDefault()
 
