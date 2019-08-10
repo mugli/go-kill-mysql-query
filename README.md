@@ -14,6 +14,8 @@
 
 It can connect to MySQL server as configured, can use SSH Tunnel if necessary, and let you decide which query to kill. By default queries running for more than 10 seconds will be marked as long running queries, but it can be configured.
 
+![screenshot](https://raw.githubusercontent.com/mugli/go-kill-mysql-query/master/screenshot.png)
+
 ---
 
 ## Installation
