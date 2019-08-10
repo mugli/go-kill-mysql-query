@@ -16,46 +16,34 @@ import (
 func main() {
 	var config configuration.Config
 
-	args := os.Args
-
-	if len(args) >= 2 {
-		switch args[1] {
+	if len(os.Args) >= 2 {
+		switch os.Args[1] {
 		case "generate", "init":
-			var file string
-			if len(args) > 2 {
-				file = args[2]
-			}
-
-			err := configuration.Generate(file)
-
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-
-			os.Exit(0)
+			generateConfig()
 		case "help", "-h", "--help":
 			showHelp()
 		default:
-			var err error
-			config, err = configuration.Read(args[1])
-
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
+			config = readConfig(os.Args[1])
 		}
 	} else {
-		var err error
-
-		// Try to read from default config file
-		config, err = configuration.Read("")
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+		config = readConfig("")
 	}
 
+	killQueries(config)
+}
+
+func readConfig(filePath string) configuration.Config {
+	config, err := configuration.Read(filePath)
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	return config
+}
+
+func killQueries(config configuration.Config) {
 	dbConn, err := mysql.Connect(config)
 	if err != nil {
 		fmt.Println(err)
@@ -79,6 +67,22 @@ func main() {
 		fmt.Println("💫	Rechecking...")
 		fmt.Println("-----------------------------------")
 	}
+}
+
+func generateConfig() {
+	var file string
+	if len(os.Args) > 2 {
+		file = os.Args[2]
+	}
+
+	err := configuration.Generate(file)
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	os.Exit(0)
 }
 
 func showHelp() {
