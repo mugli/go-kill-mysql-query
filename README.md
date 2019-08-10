@@ -10,7 +10,7 @@
 
 `kill-mysql-query` interactively shows long running queries in MySQL database and provide option kill them one by one.
 
-👉 Great for firefighting 🔥🚨🚒
+👉 Great for firefighting situations 🔥🚨🚒
 
 It can connect to MySQL server as configured, can use SSH Tunnel if necessary, and let you decide which query to kill. By default queries running for more than 10 seconds will be marked as long running queries, but it can be configured.
 
@@ -20,7 +20,7 @@ It can connect to MySQL server as configured, can use SSH Tunnel if necessary, a
 
 ## Installation
 
-Download binary from [release](https://github.com/mugli/go-kill-mysql-query/releases).
+Download binary from [release tab](https://github.com/mugli/go-kill-mysql-query/releases).
 
 ---
 
@@ -48,6 +48,8 @@ Other commands:
 ---
 
 ## Configuration
+
+Run `kill-mysql-query init` to generate an empty configuration file.
 
 ```
 [MySQL]

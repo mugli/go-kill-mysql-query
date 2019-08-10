@@ -142,6 +142,6 @@ func Connect(config configuration.Config) (*sqlx.DB, error) {
 		return nil, err
 	}
 
-	fmt.Println("⚡️	Successfully connected to the db")
+	fmt.Println("⚡️	Successfully connected to the database")
 	return dbConn, nil
 }
