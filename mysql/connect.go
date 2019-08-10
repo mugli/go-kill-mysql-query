@@ -10,7 +10,7 @@ import (
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/agent"
 
-	"go-kill-mysql-query/configuration"
+	"github.com/mugli/go-kill-mysql-query/configuration"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/rhysd/abspath"

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"text/template"
 
-	"go-kill-mysql-query/configuration"
+	"github.com/mugli/go-kill-mysql-query/configuration"
 
 	"github.com/jmoiron/sqlx"
 )

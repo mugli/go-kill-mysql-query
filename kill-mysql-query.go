@@ -5,8 +5,8 @@ import (
 	"os"
 	"strings"
 
-	"go-kill-mysql-query/configuration"
-	"go-kill-mysql-query/mysql"
+	"github.com/mugli/go-kill-mysql-query/configuration"
+	"github.com/mugli/go-kill-mysql-query/mysql"
 
 	"github.com/gookit/color"
 	"github.com/jmoiron/sqlx"
