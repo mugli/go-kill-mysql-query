@@ -72,9 +72,9 @@ func main() {
 		}
 
 		showKillPrompt(longQueries, dbConn, config)
-		fmt.Println()
+		fmt.Println("-----------------------------------")
 		fmt.Println("💫	Rechecking...")
-		fmt.Println()
+		fmt.Println("-----------------------------------")
 	}
 }
 
@@ -87,7 +87,7 @@ func showHelp() {
 |_|_| |_|_|
 
 kill-mysql-query interactively shows long running queries in MySQL database
-and provide option kill them one by one.
+and provide option kill them one by one. Great for firefighting. 🔥🚨🚒
 
 It can connect to MySQL server as configured, using SSH Tunnel if necessary 
 and let you decide which query to kill. By default queries running for more
@@ -127,6 +127,8 @@ func showKillPrompt(longQueries []mysql.MysqlProcess, dbConn *sqlx.DB, config co
 		cyan := color.FgCyan.Render
 		label := fmt.Sprintf("🐢	This query is running for %s second(s) in `%s` database:\n\n%s\n\n", cyan(query.Time), cyan(query.DB), cyan(query.Info.String))
 
+		fmt.Println()
+		fmt.Println()
 		fmt.Println(label)
 		prompt := promptui.Prompt{
 			Label:     "🧨  Kill it?",
@@ -152,9 +154,9 @@ func showKillPrompt(longQueries []mysql.MysqlProcess, dbConn *sqlx.DB, config co
 	if len(longQueries) > 1 {
 		templates := &promptui.SelectTemplates{
 			Label: "{{ . }}?",
-			Active: "🧨  DB `{{ .DB | cyan }}`,	Running Time: {{ .Time | cyan }}s,	Query: {{ .Info.String | cyan }}",
-			Inactive: "   DB `{{ .DB | cyan }}`,	Running Time: {{ .Time | cyan }}s,	Query: {{ .Info.String | cyan }}",
-			Selected: "💥  DB `{{ .DB | cyan }}`,	Running Time: {{ .Time | cyan }}s,	Query: {{ .Info.String | cyan }}",
+			Active: "👉	DB `{{ .DB | cyan }}`,	Running Time: {{ .Time | cyan }}s,	Query: {{ .Info.String | cyan }}",
+			Inactive: "	DB `{{ .DB }}`,	Running Time: {{ .Time }}s,	Query: {{ .Info.String }}",
+			Selected: "💥	DB `{{ .DB | cyan }}`,	Running Time: {{ .Time | cyan }}s,	Query: {{ .Info.String | cyan }}",
 			Details: `
 --------- QUERY ----------
 {{ "ID:" | faint }}	{{ .ID }}
@@ -166,12 +168,14 @@ func showKillPrompt(longQueries []mysql.MysqlProcess, dbConn *sqlx.DB, config co
 		}
 
 		prompt := promptui.Select{
-			Label:     "Which one to kill?",
+			Label:     "Press enter to select. Which one to kill?",
 			Items:     longQueries,
 			Templates: templates,
 			Size:      10,
 		}
 
+		fmt.Println()
+		fmt.Println()
 		i, _, err := prompt.Run()
 
 		if err != nil {
