@@ -94,7 +94,7 @@ func showHelp() {
 |_|_| |_|_|
 
 kill-mysql-query interactively shows long running queries in MySQL database
-and provide option kill them one by one. Great for firefighting. 🔥🚨🚒
+and provide option to kill them one by one. Great for firefighting. 🔥🚨🚒
 
 It can connect to MySQL server as configured, using SSH Tunnel if necessary 
 and let you decide which query to kill. By default queries running for more

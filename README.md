@@ -8,7 +8,7 @@
 |_|_| |_|_|
 ```
 
-`kill-mysql-query` interactively shows long running queries in MySQL database and provide option kill them one by one.
+`kill-mysql-query` interactively shows long running queries in MySQL database and provide option to kill them one by one.
 
 👉 Great for firefighting situations 🔥🚨🚒
 
