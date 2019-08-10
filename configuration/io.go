@@ -66,7 +66,7 @@ func Read(file string) (Config, error) {
 		if fExists(defaultConfig) {
 			filePath = defaultConfig
 		} else {
-			return config, errors.New(defaultConfig + " does not exist. Cannot read from config. Use `kill-mysql-query generate` to generate a new config file.")
+			return config, errors.New(defaultConfig + " does not exist. Cannot read from config. \n\nRun `kill-mysql-query help` for usage details.\n")
 		}
 	} else {
 		abs, err := abspath.ExpandFrom(file)
@@ -76,7 +76,7 @@ func Read(file string) (Config, error) {
 
 		filePath = abs.String()
 		if !fExists(filePath) {
-			return config, errors.New(filePath + " does not exist. Cannot read from config. Use `kill-mysql-query generate` to generate a new config file.")
+			return config, errors.New(filePath + " does not exist. Cannot read from config. \n\nRun `kill-mysql-query help` for usage details.\n")
 		}
 	}
 

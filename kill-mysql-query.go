@@ -16,12 +16,14 @@ import (
 func main() {
 	var config configuration.Config
 
-	if len(os.Args) >= 2 {
-		switch os.Args[1] {
-		case "generate":
+	args := os.Args
+
+	if len(args) >= 2 {
+		switch args[1] {
+		case "generate", "init":
 			var file string
-			if len(os.Args) > 2 {
-				file = os.Args[2]
+			if len(args) > 2 {
+				file = args[2]
 			}
 
 			err := configuration.Generate(file)
@@ -32,9 +34,11 @@ func main() {
 			}
 
 			os.Exit(0)
+		case "help", "-h", "--help":
+			showHelp()
 		default:
 			var err error
-			config, err = configuration.Read(os.Args[1])
+			config, err = configuration.Read(args[1])
 
 			if err != nil {
 				fmt.Println(err)
@@ -72,6 +76,44 @@ func main() {
 		fmt.Println("💫	Rechecking...")
 		fmt.Println()
 	}
+}
+
+func showHelp() {
+	help := `
+  _____     ____
+ /      \  |  o | 
+|        |/ ___\| 
+|_________/     
+|_|_| |_|_|
+
+kill-mysql-query interactively shows long running queries in MySQL database
+and provide option kill them one by one.
+
+It can connect to MySQL server as configured, using SSH Tunnel if necessary 
+and let you decide which query to kill. By default queries running for more
+than 10 seconds will be marked as long running queries, but it can be configured.
+
+------
+Usage:
+
+kill-mysql-query [config.toml]:
+	Checks for long running queries in the configured server. 
+	If no file is given, it tries to read from config.toml 
+	in the current directory.
+
+Other commands:
+
+	generate [config.toml]:
+		Generates a new empty configuration file
+
+	init:
+		Alias for generate
+
+	help, --help, -h:	
+		Shows this message
+`
+	fmt.Println(help)
+	os.Exit(0)
 }
 
 func showKillPrompt(longQueries []mysql.MysqlProcess, dbConn *sqlx.DB, config configuration.Config) {
