@@ -1,4 +1,6 @@
+package configuration
 
+var baseConfig =`
 
 [MySQL]
   mysql_host = ""
@@ -40,3 +42,4 @@
   # this value.
   timeout_second = 10
 
+`

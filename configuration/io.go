@@ -126,14 +126,14 @@ func Generate(file string) error {
 		}
 	}
 
-	config := setDefault()
 	f, err := os.Create(filePath)
 	defer f.Close()
 	if err != nil {
 		return err
 	}
 
-	if err := toml.NewEncoder(f).Encode(config); err != nil {
+	_, err = f.WriteString(baseConfig)
+	if err != nil {
 		return err
 	}
 
