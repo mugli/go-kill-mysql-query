@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"text/template"
 
+	"github.com/gookit/color"
 	"github.com/mugli/go-kill-mysql-query/configuration"
 
 	"github.com/jmoiron/sqlx"
@@ -104,7 +105,7 @@ func truncateString(str string, num int) string {
 }
 
 func GetLongRunningQueries(dbConn *sqlx.DB, config configuration.Config) ([]MysqlProcess, error) {
-	fmt.Println("🕴	Looking for slow queries...")
+	fmt.Println("🕴	Looking for long running queries...")
 
 	longQueries := make([]MysqlProcess, 0)
 	query, err := generateQuery(config)
@@ -130,12 +131,14 @@ func GetLongRunningQueries(dbConn *sqlx.DB, config configuration.Config) ([]Mysq
 }
 
 func KillMySQLProcess(killCommand string, dbConn *sqlx.DB) error {
+	fmt.Println()
 	fmt.Println("☠️	Sending kill command...")
 
 	if _, err := dbConn.Queryx(killCommand); err != nil {
 		return err
 	}
 
-	fmt.Println("☠️	Killed it!")
+	green := color.FgGreen.Render
+	fmt.Println("☠️	" + green("Killed it!"))
 	return nil
 }

@@ -60,12 +60,7 @@ func killQueries(config configuration.Config) {
 		}
 
 		showKillPrompt(longQueries, dbConn, config)
-		fmt.Println()
-		fmt.Println()
-		fmt.Println()
-		fmt.Println("-----------------------------------")
 		fmt.Println("💫	Rechecking...")
-		fmt.Println("-----------------------------------")
 	}
 }
 
@@ -129,13 +124,16 @@ func showKillPrompt(longQueries []mysql.MysqlProcess, dbConn *sqlx.DB, config co
 		os.Exit(0)
 	}
 
-	if len(longQueries) == 1 {
-		query := longQueries[0]
-		cyan := color.FgCyan.Render
-		label := fmt.Sprintf("🐢	This query is running for %s second(s) in `%s` database:\n\n%s\n\n", cyan(query.Time), cyan(query.DB), cyan(query.Info.String))
+	cyan := color.FgCyan.Render
+	green := color.FgGreen.Render
 
+	if len(longQueries) == 1 {
 		fmt.Println()
 		fmt.Println()
+		fmt.Printf("❄️	Found %s long running query!\n", cyan("1"))
+		query := longQueries[0]
+		label := fmt.Sprintf("🐢	This query is running for %s second(s) in the `%s` database:\n\n%s\n\n", cyan(query.Time), cyan(query.DB), cyan(query.TruncatedQuery))
+
 		fmt.Println(label)
 		prompt := promptui.Prompt{
 			Label:     "🧨  Kill it?",
@@ -159,6 +157,11 @@ func showKillPrompt(longQueries []mysql.MysqlProcess, dbConn *sqlx.DB, config co
 	}
 
 	if len(longQueries) > 1 {
+		fmt.Println()
+		fmt.Println()
+		fmt.Printf("❄️	Found %s long running queries!\n", cyan(len(longQueries)))
+		fmt.Println()
+
 		templates := &promptui.SelectTemplates{
 			Label: "{{ . }}?",
 			Active: "👉	DB `{{ .DB | cyan }}`,	Running Time: {{ .Time | cyan }}s,	Query: {{ .TruncatedQuery | cyan }}",
@@ -174,15 +177,14 @@ func showKillPrompt(longQueries []mysql.MysqlProcess, dbConn *sqlx.DB, config co
 {{ "Query:" | faint }}	{{ .TruncatedQuery }}`,
 		}
 
+		label := fmt.Sprintf("Press %s to confirm. Which one to kill?", green("ENTER"))
 		prompt := promptui.Select{
-			Label:     "Press enter to select. Which one to kill?",
+			Label:     label,
 			Items:     longQueries,
 			Templates: templates,
 			Size:      10,
 		}
 
-		fmt.Println()
-		fmt.Println()
 		i, _, err := prompt.Run()
 
 		if err != nil {
